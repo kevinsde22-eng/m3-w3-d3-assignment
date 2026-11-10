@@ -22,10 +22,11 @@ function makePac() {
   newimg.width = 100;
 
   // TODO: set position here
-
+  newimg.style.left = position.x + 'px';
+  newimg.style.top = position.y + 'px';
 
   // TODO add new Child image to game
-  game.appendChild(/* TODO: add parameter */);
+  game.appendChild(newimg);
 
   // return details in an object
   return {
@@ -50,7 +51,24 @@ function update() {
 
 function checkCollisions(item) {
   // TODO: detect collision with all walls and make pacman bounce
-  
+  const imgWidth = item.newimg.width;
+  const imgHeight = item.newimg.height || item.newimg.width; // height is 0 until the image has loaded
+
+  // where the pacman will be after this step
+  const nextX = item.position.x + item.velocity.x;
+  const nextY = item.position.y + item.velocity.y;
+
+  // left or right wall: reverse the horizontal direction
+  if (nextX + imgWidth > window.innerWidth || nextX < 0) {
+    item.velocity.x = -item.velocity.x;
+    // face the direction of travel (PacMan1 faces right, PacMan3 faces left)
+    item.newimg.src = item.velocity.x >= 0 ? './images/PacMan1.png' : './images/PacMan3.png';
+  }
+
+  // top or bottom wall: reverse the vertical direction
+  if (nextY + imgHeight > window.innerHeight || nextY < 0) {
+    item.velocity.y = -item.velocity.y;
+  }
 }
 
 function makeOne() {
